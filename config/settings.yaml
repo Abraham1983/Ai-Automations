@@ -1,0 +1,261 @@
+# AI Automation Platform Configuration
+
+# Application Settings
+app:
+  name: "AI Automation Platform"
+  version: "1.0.0"
+  debug: false
+  environment: "production"  # development, staging, production
+  timezone: "UTC"
+
+# API Configuration
+api:
+  host: "0.0.0.0"
+  port: 8000
+  workers: 4
+  timeout: 300
+  cors_origins:
+    - "http://localhost:3000"
+    - "https://yourdomain.com"
+
+# AI Model Configuration
+ai_models:
+  openai:
+    api_key: "${OPENAI_API_KEY}"
+    model: "gpt-4"
+    temperature: 0.3
+    max_tokens: 4000
+    timeout: 30
+  
+  anthropic:
+    api_key: "${ANTHROPIC_API_KEY}"
+    model: "claude-3-opus-20240229"
+    max_tokens: 4000
+
+# Database Configuration
+database:
+  primary:
+    driver: "postgresql"
+    host: "${DB_HOST:localhost}"
+    port: "${DB_PORT:5432}"
+    name: "${DB_NAME:ai_automation}"
+    username: "${DB_USER:postgres}"
+    password: "${DB_PASSWORD}"
+    pool_size: 10
+    max_overflow: 20
+    
+  redis:
+    host: "${REDIS_HOST:localhost}"
+    port: "${REDIS_PORT:6379}"
+    password: "${REDIS_PASSWORD:}"
+    db: 0
+    max_connections: 10
+
+# Customer Experience Configuration
+customer_experience:
+  chatbot:
+    default_confidence_threshold: 0.7
+    escalation_sentiment_threshold: -0.5
+    max_conversation_length: 10
+    response_timeout: 30
+    
+  knowledge_base:
+    update_interval: 3600  # seconds
+    max_articles: 1000
+    search_limit: 5
+    
+  sentiment_analysis:
+    model: "vader"
+    threshold_positive: 0.3
+    threshold_negative: -0.3
+
+# Sales Automation Configuration
+sales_automation:
+  lead_scoring:
+    model_version: "1.0"
+    retrain_interval: 2592000  # 30 days in seconds
+    score_threshold_high: 70
+    score_threshold_medium: 50
+    
+  pipeline:
+    auto_assignment: true
+    round_robin: true
+    max_leads_per_rep: 50
+    
+  forecasting:
+    prediction_horizon: 90  # days
+    confidence_interval: 0.95
+
+# Research Automation Configuration
+research_automation:
+  report_generation:
+    max_data_sources: 10
+    default_template: "professional"
+    output_formats: ["html", "pdf"]
+    chart_resolution: 300  # DPI
+    
+  data_analysis:
+    batch_size: 1000
+    timeout: 600  # seconds
+    auto_insights: true
+    
+  visualization:
+    color_palette: ["#007acc", "#ff6b35", "#28a745", "#ffc107", "#dc3545"]
+    chart_style: "seaborn"
+    figure_size: [10, 6]
+
+# Security Configuration
+security:
+  secret_key: "${SECRET_KEY}"
+  algorithm: "HS256"
+  access_token_expire_minutes: 30
+  refresh_token_expire_days: 7
+  
+  password_policy:
+    min_length: 8
+    require_uppercase: true
+    require_lowercase: true
+    require_numbers: true
+    require_special_chars: true
+    
+  rate_limiting:
+    requests_per_minute: 60
+    burst_allowance: 10
+
+# Monitoring and Logging
+monitoring:
+  logging:
+    level: "INFO"
+    format: "json"
+    file_path: "/var/log/ai-automation.log"
+    max_file_size: "100MB"
+    backup_count: 5
+    
+  metrics:
+    enabled: true
+    prometheus_port: 9090
+    collection_interval: 30
+    
+  health_checks:
+    enabled: true
+    endpoint: "/health"
+    database_check: true
+    redis_check: true
+    ai_models_check: true
+
+# Email Configuration
+email:
+  smtp_server: "${SMTP_SERVER}"
+  smtp_port: "${SMTP_PORT:587}"
+  username: "${SMTP_USERNAME}"
+  password: "${SMTP_PASSWORD}"
+  use_tls: true
+  from_address: "${FROM_EMAIL:noreply@ai-automation.com}"
+  
+  templates:
+    welcome: "welcome_email.html"
+    password_reset: "password_reset.html"
+    report_ready: "report_ready.html"
+
+# File Storage Configuration
+storage:
+  local:
+    base_path: "/var/data/ai-automation"
+    max_file_size: "100MB"
+    allowed_extensions: [".csv", ".xlsx", ".json", ".pdf", ".png", ".jpg"]
+    
+  s3:
+    bucket: "${S3_BUCKET}"
+    region: "${S3_REGION:us-east-1}"
+    access_key: "${S3_ACCESS_KEY}"
+    secret_key: "${S3_SECRET_KEY}"
+    
+  azure:
+    account_name: "${AZURE_ACCOUNT_NAME}"
+    account_key: "${AZURE_ACCOUNT_KEY}"
+    container: "${AZURE_CONTAINER}"
+
+# Task Queue Configuration
+celery:
+  broker_url: "${CELERY_BROKER_URL:redis://localhost:6379/1}"
+  result_backend: "${CELERY_RESULT_BACKEND:redis://localhost:6379/2}"
+  task_serializer: "json"
+  accept_content: ["json"]
+  result_serializer: "json"
+  timezone: "UTC"
+  
+  task_routes:
+    "ai_automation.tasks.generate_report": {"queue": "reports"}
+    "ai_automation.tasks.score_lead": {"queue": "scoring"}
+    "ai_automation.tasks.process_chat": {"queue": "chat"}
+
+# Business Rules Configuration
+business_rules:
+  customer_experience:
+    auto_escalation_keywords: ["angry", "frustrated", "cancel", "refund", "lawsuit"]
+    business_hours:
+      start: "09:00"
+      end: "17:00"
+      timezone: "America/New_York"
+      days: ["monday", "tuesday", "wednesday", "thursday", "friday"]
+      
+  sales_automation:
+    lead_qualification_rules:
+      min_company_size: 10
+      required_budget: 10000
+      target_industries: ["technology", "healthcare", "finance"]
+      
+  research_automation:
+    quality_thresholds:
+      min_data_points: 100
+      max_processing_time: 3600
+      min_confidence_score: 0.8
+
+# Integration Configuration
+integrations:
+  crm:
+    salesforce:
+      client_id: "${SALESFORCE_CLIENT_ID}"
+      client_secret: "${SALESFORCE_CLIENT_SECRET}"
+      sandbox: false
+      
+    hubspot:
+      api_key: "${HUBSPOT_API_KEY}"
+      
+  analytics:
+    google_analytics:
+      tracking_id: "${GA_TRACKING_ID}"
+      
+  slack:
+    webhook_url: "${SLACK_WEBHOOK_URL}"
+    channel: "#ai-automation"
+    
+  teams:
+    webhook_url: "${TEAMS_WEBHOOK_URL}"
+
+# Feature Flags
+features:
+  advanced_analytics: true
+  auto_lead_scoring: true
+  ai_report_generation: true
+  real_time_chat: true
+  multi_tenant: false
+  api_versioning: true
+  
+# Performance Configuration
+performance:
+  cache:
+    ttl_default: 3600  # seconds
+    ttl_reports: 86400  # 24 hours
+    ttl_lead_scores: 7200  # 2 hours
+    
+  batch_processing:
+    chunk_size: 1000
+    max_concurrent_tasks: 5
+    retry_attempts: 3
+    retry_delay: 60  # seconds
+    
+  rate_limits:
+    api_calls_per_hour: 1000
+    report_generations_per_day: 50
+    lead_scores_per_hour: 500
